@@ -1,6 +1,16 @@
 FROM n8nio/n8n:latest
+
 USER root
-RUN npm config set legacy-peer-deps true \
-    && npm install -g n8n-nodes-streaming-http-request @apify/n8n-nodes-apify
+
+# Install into n8n custom directory
+RUN mkdir -p /home/node/.n8n/custom && \
+    cd /home/node/.n8n/custom && \
+    npm init -y && \
+    npm install --legacy-peer-deps \
+        n8n-nodes-streaming-http-request \
+        @apify/n8n-nodes-apify && \
+    chown -R node:node /home/node/.n8n
+
 USER node
+
 CMD ["n8n", "start"]
