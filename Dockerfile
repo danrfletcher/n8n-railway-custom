@@ -1,3 +1,4 @@
+FROM n8nio/n8n:latest
 USER root
 RUN npm config set legacy-peer-deps true \
     && npm install -g n8n-nodes-streaming-http-request @apify/n8n-nodes-apify
