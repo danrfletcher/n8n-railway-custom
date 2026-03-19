@@ -2,20 +2,17 @@ FROM n8nio/n8n:latest
 
 USER root
 
-# Create the custom directory (NOT the node_modules dir directly)
-RUN mkdir -p /home/node/.n8n/custom
+# Standard location where n8n automatically looks for community nodes
+RUN mkdir -p /home/node/.n8n/nodes
 
-# Set workdir to custom
-WORKDIR /home/node/.n8n/custom
-
-# Init package.json (name will be "custom", which is valid) and install.
-# npm install will automatically create the node_modules folder inside this directory.
+# Install the packages there (exactly like the UI does)
+WORKDIR /home/node/.n8n/nodes
 RUN npm init -y && \
     npm install --legacy-peer-deps \
         n8n-nodes-streaming-http-request \
         @apify/n8n-nodes-apify
 
-# Fix permissions so the n8n user can read the files
+# Fix permissions
 RUN chown -R node:node /home/node/.n8n
 
 USER node
